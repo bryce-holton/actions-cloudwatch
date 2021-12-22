@@ -37,7 +37,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
         if: always()  # Setup credentials even if the workflow failed
-      - name: Log Build
-        # replace TAG by the latest tag in the repository
-        uses: ros-tooling/action-cloudwatch-metrics@TAG
+      - name: Post Amazon Cloudwatch Metrics
+        uses: ros-tooling/action-cloudwatch-metrics@0.0.5
         if: always()  # Need to run to log the workflow failure
