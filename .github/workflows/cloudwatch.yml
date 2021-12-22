@@ -26,11 +26,18 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Build
+        run: npm install
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      # Make sure the secrets are stored in you repo settings
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+        if: always()  # Setup credentials even if the workflow failed
+      - name: Log Build
+        # replace TAG by the latest tag in the repository
+        uses: ros-tooling/action-cloudwatch-metrics@TAG
+        if: always()  # Need to run to log the workflow failure
